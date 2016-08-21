@@ -26,15 +26,15 @@ PIPE_WIDTH = IMAGES['pipe'][0].get_width()
 PIPE_HEIGHT = IMAGES['pipe'][0].get_height()
 BACKGROUND_WIDTH = IMAGES['background'].get_width()
 
-PLAYER_INDEX_GEN = cycle([0, 1, 2, 1])
+PLAYER_INDEX_GEN = cycle([0, 1, 2, 1])  #add an iterator that made by a list [0,1,2,1]
 
 
 class GameState:
     def __init__(self):
-        self.score = self.playerIndex = self.loopIter = 0
+        self.score = self.playerIndex = self.loopIter = 0 # playerIndex control the bird anime 
         self.playerx = int(SCREENWIDTH * 0.2)
-        self.playery = int((SCREENHEIGHT - PLAYER_HEIGHT) / 2)
-        self.basex = 0
+        self.playery = int((SCREENHEIGHT - PLAYER_HEIGHT) / 2) 
+        self.basex = 0 #control the floor anime
         self.baseShift = IMAGES['base'].get_width() - BACKGROUND_WIDTH
 
         newPipe1 = getRandomPipe()
@@ -69,7 +69,7 @@ class GameState:
         # input_actions[0] == 1: do nothing
         # input_actions[1] == 1: flap the bird
         if input_actions[1] == 1:
-            if self.playery > -2 * PLAYER_HEIGHT:
+            if self.playery > -2 * PLAYER_HEIGHT: #check if the bird touch the upper line
                 self.playerVelY = self.playerFlapAcc
                 self.playerFlapped = True
                 #SOUNDS['wing'].play()
@@ -84,7 +84,7 @@ class GameState:
                 reward = 1
 
         # playerIndex basex change
-        if (self.loopIter + 1) % 3 == 0:
+        if (self.loopIter + 1) % 3 == 0: 
             self.playerIndex = next(PLAYER_INDEX_GEN)
         self.loopIter = (self.loopIter + 1) % 30
         self.basex = -((-self.basex + 100) % self.baseShift)
@@ -94,7 +94,7 @@ class GameState:
             self.playerVelY += self.playerAccY
         if self.playerFlapped:
             self.playerFlapped = False
-        self.playery += min(self.playerVelY, BASEY - self.playery - PLAYER_HEIGHT)
+        self.playery += min(self.playerVelY, BASEY - self.playery - PLAYER_HEIGHT) #it will stay at the floor but not continue to down
         if self.playery < 0:
             self.playery = 0
 
